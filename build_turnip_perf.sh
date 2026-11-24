@@ -12,10 +12,10 @@ nocolor='\033[0m'
 deps="git meson ninja patchelf unzip curl pip flex bison zip glslang glslangValidator pkg-config"
 
 workdir="$(pwd)/turnip_workdir"
-ndkver="android-ndk-r29"
+ndkver="android-ndk-r27c"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="34"
-mesasrc="https://freedesktop.org"
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa" 
 srcfolder="mesa"
 
 # Целевая конфигурация: Lenovo Legion Y700 Gen 3
