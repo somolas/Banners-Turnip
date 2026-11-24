@@ -22,7 +22,7 @@ srcfolder="mesa"
 DEVICE_NAME="Lenovo Legion Y700 Gen 3 (TB321FU)"
 TARGET_SOC="Qualcomm Snapdragon 8 Gen 3 (SM8650-AB)"
 TARGET_CPU="cortex-x4"
-TARGET_ARCH="armv9-a+crypto+fp16+dotprod+i8mm+sve2"
+TARGET_ARCH="armv9-a+crypto+fp16+dotprod+i8mm"
 TARGET_GPU="Adreno 750 (A750 / KGSL)"
 
 print_system_telemetry(){
@@ -119,7 +119,7 @@ build_lib_for_android(){
 	ARCH_FLAGS="-march=${TARGET_ARCH} -mtune=${TARGET_CPU} -O3 -fno-plt -flto=full -fvectorize -fslp-vectorize -funroll-loops -falign-functions=32 -fno-semantic-interposition -fomit-frame-pointer -ffunction-sections -fdata-sections"
 	
 	# Оптимизация линковщика LLD + 16KB page size alignment
-	export LDFLAGS="-fuse-ld=lld -flto=full -Wl,-O3,--lto-O3,-Bsymbolic-functions,--gc-sections,--as-needed,--icf=all,-z,max-page-size=16384"
+	export LDFLAGS="-fuse-ld=lld -flto=full -Wl,-O3,--lto-O3,-Bsymbolic-functions,--gc-sections,--as-needed--as-needed"
 	
 	COMMON_WARNINGS="-Wno-error -Wno-deprecated-declarations -Wno-incompatible-pointer-types-discards-qualifiers -Wno-incompatible-pointer-types"
 	export CFLAGS="-D__ANDROID__ $ARCH_FLAGS $COMMON_WARNINGS"
@@ -221,7 +221,7 @@ EOF
   "packageVersion": "1",
   "vendor": "Mesa",
   "driverVersion": "Vulkan 1.4.335",
-  "minApi": 34,
+  "minApi": 27,
   "libraryName": "libvulkan_freedreno.so"
 }
 EOF
