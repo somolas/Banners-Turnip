@@ -199,12 +199,10 @@ EOF
 		echo -e "${red}Build failed! libvulkan_freedreno.so not found.${nocolor}" && exit 1
 	fi
 
-		# Безопасный стриппинг и подмена SONAME специально для загрузчика GameHub
+			# Безопасный стриппинг
 	"$ndk/llvm-strip" --strip-unneeded "$SO_PATH"
-	patchelf --set-soname vulkan.ad07xx.so "$SO_PATH"
-	mv "$SO_PATH" "/tmp/turnip-$branch_name/lib/vulkan.ad07xx.so"
 
-	echo "Making Adreno Tools ZIP archive for GameHub..."
+	echo "Making Adreno Tools ZIP archive..."
 	cd "/tmp/turnip-$branch_name/lib"
 
 	_zip_name="mesa-turnip-perf-$branch_name.zip"
@@ -219,13 +217,12 @@ EOF
   "vendor": "Mesa",
   "driverVersion": "Vulkan 1.4.335",
   "minApi": 27,
-  "libraryName": "vulkan.ad07xx.so"
+  "libraryName": "libvulkan_freedreno.so"
 }
 EOF
-	zip -q "/tmp/${_zip_name}" vulkan.ad07xx.so meta.json
+	zip -q "/tmp/${_zip_name}" libvulkan_freedreno.so meta.json
 	cd - > /dev/null
 
-	if [ ! -f "/tmp/${_zip_name}" ]; then
 		echo -e "${red}Failed to pack the archive!${nocolor}" && exit 1
 	else
 		cp "/tmp/${_zip_name}" "$workdir/"
