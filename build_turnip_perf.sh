@@ -13,7 +13,7 @@ deps="git meson ninja patchelf unzip curl pip flex bison zip glslang glslangVali
 
 workdir="$(pwd)/turnip_workdir"
 ndkver="android-ndk-r27c"
-ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
+nk="$(find /usr/local/lib/android/sdk/ndk -maxdepth 1 -mindepth 1 | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="34"
 mesasrc="https://gitlab.freedesktop.org/mesa/mesa" 
 srcfolder="mesa"
@@ -78,13 +78,7 @@ prepare_workdir(){
 		return
 	fi
 
-	if [ ! -d "$ndkver" ]; then
-		echo "Downloading $ndkver from Google server..."
-		curl -sL "https://google.com{ndkver}-linux.zip" --output "${ndkver}-linux.zip"
-		echo "Extracting $ndkver..."
-		unzip -q "${ndkver}-linux.zip"
-		rm -f "${ndkver}-linux.zip"
-	fi
+
 
 	if [ ! -d "$srcfolder" ]; then
 		echo "Cloning Mesa source (main branch)..."
