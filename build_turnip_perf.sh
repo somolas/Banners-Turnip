@@ -13,7 +13,7 @@ deps="git meson ninja patchelf unzip curl pip flex bison zip glslang glslangVali
 
 workdir="$(pwd)/turnip_workdir"
 ndkver="android-ndk-r27c"
-nk="$(find /usr/local/lib/android/sdk/ndk -maxdepth 1 -mindepth 1 | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/bin"
+ndk="$(dirname "$(find /usr -name "aarch64-linux-android34-clang" 2>/dev/null | head -n 1)")"
 sdkver="34"
 mesasrc="https://gitlab.freedesktop.org/mesa/mesa" 
 srcfolder="mesa"
