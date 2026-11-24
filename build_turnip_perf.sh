@@ -246,6 +246,8 @@ collect_meson_opts(){
         "-Degl=disabled"
         "-Dllvm=disabled"
         "-Dzstd=disabled"
+        "-Dmesa-clc=disabled"
+        "-Dinstall-mesa-clc=false"
         "-Dandroid-libbacktrace=disabled"
         "-Dperfetto=false"
         "-Dvalgrind=disabled"
