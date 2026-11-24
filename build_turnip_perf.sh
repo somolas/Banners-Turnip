@@ -199,15 +199,12 @@ EOF
 		echo -e "${red}Build failed! libvulkan_freedreno.so not found.${nocolor}" && exit 1
 	fi
 
-	# Безопасный стриппинг с сохранением таблицы динамических символов Vulkan
+		# Безопасный стриппинг и подмена SONAME специально для загрузчика GameHub
 	"$ndk/llvm-strip" --strip-unneeded "$SO_PATH"
+	patchelf --set-soname vulkan.ad07xx.so "$SO_PATH"
+	mv "$SO_PATH" "/tmp/turnip-$branch_name/lib/vulkan.ad07xx.so"
 
-	echo -e "${cyan}>>> Итоговая проверка скомпилированного драйвера:${nocolor}"
-	ls -lh "$SO_PATH"
-	file "$SO_PATH" || true
-	"$ndk/llvm-readelf" -h "$SO_PATH" | grep -E "Machine:|Type:|Entry" || true
-
-	echo "Making Adreno Tools ZIP archive..."
+	echo "Making Adreno Tools ZIP archive for GameHub..."
 	cd "/tmp/turnip-$branch_name/lib"
 
 	_zip_name="mesa-turnip-perf-$branch_name.zip"
@@ -216,16 +213,16 @@ EOF
 {
   "schemaVersion": 1,
   "name": "Turnip Y700 Gen3 ULTIMATE [SD8G3/X4] ${GITHASH}",
-  "description": "Device: Legion Y700 Gen 3 | CPU: SD 8 Gen 3 (ARMv9/Cortex-X4/SVE2) | GPU: Adreno 750 | Full LTO + O3",
+  "description": "Device: Legion Y700 Gen 3 | CPU: SD 8 Gen 3 (Cortex-X4) | GPU: Adreno 750 | Full LTO + O3",
   "author": "Custom",
   "packageVersion": "1",
   "vendor": "Mesa",
   "driverVersion": "Vulkan 1.4.335",
   "minApi": 27,
-  "libraryName": "libvulkan_freedreno.so"
+  "libraryName": "vulkan.ad07xx.so"
 }
 EOF
-	zip -q "/tmp/${_zip_name}" libvulkan_freedreno.so meta.json
+	zip -q "/tmp/${_zip_name}" vulkan.ad07xx.so meta.json
 	cd - > /dev/null
 
 	if [ ! -f "/tmp/${_zip_name}" ]; then
