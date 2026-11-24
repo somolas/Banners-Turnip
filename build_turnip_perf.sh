@@ -199,7 +199,7 @@ EOF
 		echo -e "${red}Build failed! libvulkan_freedreno.so not found.${nocolor}" && exit 1
 	fi
 
-			# Безопасный стриппинг
+	# Безопасный стриппинг
 	"$ndk/llvm-strip" --strip-unneeded "$SO_PATH"
 
 	echo "Making Adreno Tools ZIP archive..."
@@ -223,6 +223,7 @@ EOF
 	zip -q "/tmp/${_zip_name}" libvulkan_freedreno.so meta.json
 	cd - > /dev/null
 
+	if [ ! -f "/tmp/${_zip_name}" ]; then
 		echo -e "${red}Failed to pack the archive!${nocolor}" && exit 1
 	else
 		cp "/tmp/${_zip_name}" "$workdir/"
