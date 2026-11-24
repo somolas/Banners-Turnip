@@ -18,6 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ninja-build patchelf unzip flex bison git perl python3-pip glslang-tools curl zip patch
+          sudo apt-get install -y ninja-build patchelf unzip flex bison git perl python3-pip glslang-tools curl zip patch libclc-dev libclang-dev llvm-dev liblvmspirvlib-dev spirv-tool python3-yaml 
           pip3 install --break-system-packages meson mako
 
       - name: Build
