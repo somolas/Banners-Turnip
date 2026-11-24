@@ -118,8 +118,8 @@ build_lib_for_android(){
 	# Аппаратные флаги Snapdragon 8 Gen 3 (ARMv9 + Cortex-X4 + SVE2) без рискованного -ffast-math
 	ARCH_FLAGS="-march=${TARGET_ARCH} -mtune=${TARGET_CPU} -O3 -fno-plt -flto=full -fvectorize -fslp-vectorize -funroll-loops -falign-functions=32 -fno-semantic-interposition -fomit-frame-pointer -ffunction-sections -fdata-sections"
 	
-	# Оптимизация линковщика LLD + 16KB page size alignment
-	export LDFLAGS="-fuse-ld=lld -flto=full -Wl,-O3,--lto-O3,-Bsymbolic-functions,--gc-sections,--as-needed--as-needed"
+	# Оптимизация линковщика LLD + 16KB page size alignmente
+	export LDFLAGS="-fuse-ld=lld"
 	
 	COMMON_WARNINGS="-Wno-error -Wno-deprecated-declarations -Wno-incompatible-pointer-types-discards-qualifiers -Wno-incompatible-pointer-types"
 	export CFLAGS="-D__ANDROID__ $ARCH_FLAGS $COMMON_WARNINGS"
