@@ -82,7 +82,7 @@ prepare_workdir(){
 
 	if [ ! -d "$srcfolder" ]; then
 		echo "Cloning Mesa source (main branch)..."
-		git clone "$mesasrc" --depth=1 -b main "$srcfolder"
+		git clone "$mesasrc" --depth=1 -b 26.0 "$srcfolder"
 	fi
 }
 
@@ -93,7 +93,7 @@ build_lib_for_android(){
 
 	# Применение обязательных патчей KGSL
 	if [ -f "../../patches/common/apply_common.sh" ]; then
-		bash ../../patches/common/apply_common.sh . || { echo -e "${red}patches/common did not apply, aborting!${nocolor}"; exit 1; }
+	# bash ../../patches/common/apply_common.sh . || { echo -e "${red}patches/common did not apply, aborting!${nocolor}"; exit 1; }
 	else
 		echo -e "${yellow}Warning: patches/common/apply_common.sh not found, skipping...${nocolor}"
 	fi
@@ -116,7 +116,7 @@ build_lib_for_android(){
 	export OBJCOPY=llvm-objcopy
 
 	# Аппаратные флаги Snapdragon 8 Gen 3 (ARMv9 + Cortex-X4 + SVE2) без рискованного -ffast-math
-	ARCH_FLAGS="-march=${TARGET_ARCH} -mtune=${TARGET_CPU} -O3 -fno-plt -flto=full -fvectorize -fslp-vectorize -funroll-loops -falign-functions=32 -fno-semantic-interposition -fomit-frame-pointer -ffunction-sections -fdata-sections"
+	ARCH_FLAGS="-march=${TARGET_ARCH} -mtune=${TARGET_CPU} -O3 -fno-plt -flto=thin -fvectorize -fslp-vectorize -funroll-loops -falign-functions=32 -fno-semantic-interposition -fomit-frame-pointer -ffunction-sections -fdata-sections"
 	
 	# Оптимизация линковщика LLD + 16KB page size alignmente
 	export LDFLAGS="-fuse-ld=lld"
