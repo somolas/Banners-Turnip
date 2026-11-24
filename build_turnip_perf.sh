@@ -1,4 +1,5 @@
-#!/bin/bash -euo pipefail
+#!/bin/bash 
+set -e
 
 # Цвета для информативного вывода
 green='\033[0;32m'
