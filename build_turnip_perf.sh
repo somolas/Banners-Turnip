@@ -246,7 +246,6 @@ collect_meson_opts(){
         "-Degl=disabled"
         "-Dllvm=disabled"
         "-Dzstd=disabled"
-        "-Dwrap-mode=nofallback"
         "-Dandroid-libbacktrace=disabled"
         "-Dperfetto=false"
         "-Dvalgrind=disabled"
