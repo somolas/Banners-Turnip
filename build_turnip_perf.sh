@@ -230,8 +230,9 @@ endian = 'little'
 [properties]
 c_args = ['-I/usr/lib/llvm-19/include']
 cpp_args = ['-I/usr/lib/llvm-19/include']
-c_link_args = ['-L/usr/lib/llvm-19/lib']
-cpp_link_args = ['-L/usr/lib/llvm-19/lib']
+c_link_args = ['-fuse-ld=/usr/bin/ld', '-L/usr/lib/llvm-19/lib']
+cpp_link_args = ['-fuse-ld=/usr/bin/ld', '-L/usr/lib/llvm-19/lib']
+
 
 EOF
 }
@@ -280,7 +281,9 @@ collect_meson_opts(){
 configure_and_build(){
     cd "$workdir/$srcfolder"
     githash="$(git rev-parse --short HEAD)"
-    unset CC CXX LD AR STRIP CFLAGS CXXFLAGS LDFLAGS
+    unset CC CXX LD AR STRIP CFLAGS CXXFLAGS LDFLAGS CPPFLAGS CXX_LD C_LD
+    export LDFLAGS_FOR_BUILD="-fuse-ld=/usr/bin/ld"
+
 
     # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
     export LLVM_CONFIG="/usr/bin/llvm-config-19"
