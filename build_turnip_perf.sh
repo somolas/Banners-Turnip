@@ -280,6 +280,8 @@ configure_and_build(){
     # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
     export LDFLAGS="-fuse-ld=lld -Wl,-z,max-page-size=16384"
     export LLVM_CONFIG="/usr/bin/llvm-config-19"
+    export LIBRARY_PATH="/usr/lib/llvm-19/lib:${LIBRARY_PATH:-}"
+    export CPATH="/usr/lib/llvm-19/include:${CPATH:-}"
 
 
     local opts=()
