@@ -219,7 +219,7 @@ ar = 'ar'
 strip = 'strip'
 c_ld = 'ld'
 cpp_ld = 'ld'
-llvm-config = '/usr/bin/llvm-config-19'
+llvm-config = '/usr/lib/llvm-19/bin/llvm-config'
 
 [build_machine]
 system = 'linux'
