@@ -265,19 +265,8 @@ collect_meson_opts(){
         "-Dlibunwind=disabled"
         "-Dlibarchive:crypto=disabled"
     )
+  printf '%s\n' "${want[@]}"
 
-    local out=() o name
-    for o in "${want[@]}"; do
-        case "$o" in --prefix=*) out+=("$o"); continue ;; esac
-          case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc|gallium-drivers|vulkan-drivers|platforms|libarchive:*) out+=("$o"); continue ;; esac
-          case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc|gallium-drivers|vulkan-drivers|platforms) out+=("$o"); continue ;; esac
-        if [ -f "$optfile" ] && grep -Eq "['\"]${name}['\"]" "$optfile"; then
-            out+=("$o")
-        else
-            echo "  ↳ опция ${o} отсутствует в Mesa ${MESA_REF} — пропущена" >&2
-        fi
-    done
-    printf '%s\n' "${out[@]}"
 }
 
 configure_and_build(){
