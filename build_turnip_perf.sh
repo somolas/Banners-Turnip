@@ -217,8 +217,8 @@ c = '/usr/bin/gcc'
 cpp = '/usr/bin/g++'
 ar = '/usr/bin/ar'
 strip = '/usr/bin/strip'
-c_ld = '/usr/bin/ld'
-cpp_ld = '/usr/bin/ld'
+c_ld = 'bfd'
+cpp_ld = 'bfd'
 llvm-config = '/usr/bin/llvm-config-19'
 
 [build_machine]
@@ -230,8 +230,8 @@ endian = 'little'
 [properties]
 c_args = ['-I/usr/lib/llvm-19/include']
 cpp_args = ['-I/usr/lib/llvm-19/include']
-c_link_args = ['-fuse-ld=/usr/bin/ld', '-L/usr/lib/llvm-19/lib']
-cpp_link_args = ['-fuse-ld=/usr/bin/ld', '-L/usr/lib/llvm-19/lib']
+c_link_args = ['-fuse-ld=bfd', '-L/usr/lib/llvm-19/lib']
+cpp_link_args = ['-fuse-ld=bfd', '-L/usr/lib/llvm-19/lib']
 
 
 EOF
@@ -283,7 +283,7 @@ configure_and_build(){
     cd "$workdir/$srcfolder"
     githash="$(git rev-parse --short HEAD)"
     unset CC CXX LD AR STRIP CFLAGS CXXFLAGS LDFLAGS CPPFLAGS CXX_LD C_LD
-    export LDFLAGS_FOR_BUILD="-fuse-ld=/usr/bin/ld"
+    export LDFLAGS_FOR_BUILD="-fuse-ld=bfd"
 
 
     # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
