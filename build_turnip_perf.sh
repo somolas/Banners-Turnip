@@ -269,7 +269,7 @@ collect_meson_opts(){
     for o in "${want[@]}"; do
         case "$o" in --prefix=*) out+=("$o"); continue ;; esac
         name="${o#-D}"; name="${name%%=*}"
-        case "$name" in buildtype|strip|wrap-mode|b_*) out+=("$o"); continue ;; esac
+        case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc) out+=("$o"); continue ;; esac
         if [ -f "$optfile" ] && grep -Eq "option\(['\"]${name}['\"]" "$optfile"; then
             out+=("$o")
         else
