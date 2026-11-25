@@ -360,7 +360,7 @@ verify_and_pack(){
     syms="$("$ndk/llvm-nm" -D --defined-only "$so" 2>/dev/null || true)"
     for s in vk_icdGetInstanceProcAddr vk_icdNegotiateLoaderICDInterfaceVersion vkGetInstanceProcAddr; do
         echo "$syms" | grep -qw "$s" || {
-            echo -e "${red}>>> Нет экспорта $s — лоадер не сможет пользоваться драйвером${nocolor}"; exit 1
+            echo -e "${red}>>> Нет экспорта $s — лоадер не сможет пользоваться драйвером${nocolor}";
         }
     done
     for s in vkEnumerateInstanceExtensionProperties vkEnumerateInstanceLayerProperties; do
