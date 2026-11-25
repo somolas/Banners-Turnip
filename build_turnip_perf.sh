@@ -229,10 +229,11 @@ cpu_family = 'x86_64'
 cpu = 'x86_64'
 endian = 'little'
 [properties]
-c_args = ['-I/usr/lib/llvm-19/include']
-cpp_args = ['-I/usr/lib/llvm-19/include']
-c_link_args = ['-L/usr/lib/llvm-19/lib']
-cpp_link_args = ['-L/usr/lib/llvm-19/lib']
+c_args = ['-target', 'x86_64-linux-gnu', '-I/usr/lib/llvm-19/include']
+cpp_args = ['-target', 'x86_64-linux-gnu', '-I/usr/lib/llvm-19/include']
+c_link_args = ['-target', 'x86_64-linux-gnu', '-fuse-ld=ld', '-L/usr/lib/llvm-19/lib']
+cpp_link_args = ['-target', 'x86_64-linux-gnu', '-fuse-ld=ld', '-L/usr/lib/llvm-19/lib']
+
 
 EOF
 }
@@ -283,7 +284,6 @@ configure_and_build(){
     githash="$(git rev-parse --short HEAD)"
 
     # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
-    export LDFLAGS="-fuse-ld=lld -Wl,-z,max-page-size=16384"
     export LLVM_CONFIG="/usr/bin/llvm-config-19"
     export LIBRARY_PATH="/usr/lib/llvm-19/lib:${LIBRARY_PATH:-}"
     export CPATH="/usr/lib/llvm-19/include:${CPATH:-}"
