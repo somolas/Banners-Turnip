@@ -266,6 +266,8 @@ collect_meson_opts(){
         "-Dlibarchive:crypto=disabled"
         "-Dzstd=disabled"
         "-Dspirv-tools=disabled"
+        "-Dbuild-tests=false"
+        "-Dfreedreno-tools=[]"
     )
   printf '%s\n' "${want[@]}"
 
