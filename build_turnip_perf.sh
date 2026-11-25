@@ -213,12 +213,12 @@ EOF
 
     cat <<EOF > "$workdir/native.txt"
 [build_machine]
-c = '$ndk/clang'
-cpp = '$ndk/clang++'
-ar = '$ndk/llvm-ar'
-strip = '$ndk/llvm-strip'
-c_ld = '$ndk/ld.lld'
-cpp_ld = '$ndk/ld.lld'
+c = 'clang'
+cpp = 'clang++'
+ar = 'ar'
+strip = 'strip'
+c_ld = 'ld'
+cpp_ld = 'ld'
 system = 'linux'
 cpu_family = 'x86_64'
 cpu = 'x86_64'
@@ -244,7 +244,8 @@ collect_meson_opts(){
         "-Dvulkan-beta=true"
         "-Dfreedreno-kmds=kgsl"
         "-Degl=disabled"
-        "-Dllvm=disabled"
+        "-Dllvm=enabled"
+        "-Dshared-llvm=disabled"
         "-Dzstd=disabled"
         "-Dprecomp-compiler=disabled"
         "-Dandroid-libbacktrace=disabled"
