@@ -195,7 +195,7 @@ cpp = ['$clangxx', '-fno-exceptions', '-fno-unwind-tables', '-fno-asynchronous-u
 c_ld = '$ndk/ld.lld'
 cpp_ld = '$ndk/ld.lld'
 strip = '$ndk/llvm-strip'
-pkg-config = ['env', 'PKG_CONFIG_LIBDIR=$ndk/pkg-config', '/usr/bin/pkg-config']
+pkg-config = ['env', 'PKG_CONFIG_LIBDIR=$ndk/pkg-config:/usr/share/pkgconfig:/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig', '/usr/bin/pkg-config']
 
 [properties]
 c_args = [$c_str]
