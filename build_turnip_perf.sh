@@ -360,7 +360,6 @@ verify_and_pack(){
     local outzip="turnip_perf-${MESA_REF}-${githash}.zip"
     (
         cd "$prefix/lib"
-        cp libvulkan_freedreno.so vulkan.ad07xx.so
         cat <<EOF > meta.json
 {
   "schemaVersion": 1,
@@ -371,12 +370,12 @@ verify_and_pack(){
   "vendor": "Mesa",
   "driverVersion": "Vulkan 1.4.${vkh:-0}",
   "minApi": 27,
-  "libraryName": "vulkan.ad07xx.so"
+  "libraryName": "libvulkan_freedreno.so"
 }
 EOF
         python3 -m json.tool meta.json > /dev/null
         rm -f "$workdir/$outzip"
-        zip -q -X "$workdir/$outzip" vulkan.ad07xx.so meta.json
+        zip -q -X "$workdir/$outzip" libvulkan_freedreno.so meta.json
     )
 
     echo -e "${green}>>> Готово: ${workdir}/${outzip}${nocolor}"
