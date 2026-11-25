@@ -213,7 +213,6 @@ EOF
 
     cat <<EOF > "$workdir/native.txt"
 [binaries]
-[binaries]
 c = '/usr/bin/gcc'
 cpp = '/usr/bin/g++'
 ar = '/usr/bin/ar'
