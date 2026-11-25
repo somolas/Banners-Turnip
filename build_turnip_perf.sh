@@ -7,7 +7,7 @@
 #  Переменные окружения:
 #    MESA_REF=26.0|main        ветка/тег Mesa (нет такой — авто-фолбэк на main)
 #                              main — свежайшие фиксы (нужно для проверки на 8 Gen 5 / Adreno 840)
-#    SDK_VER=35                platform-sdk-version
+#    SDK_VER=34                platform-sdk-version
 #    JOBS=8                    потоков (по умолчанию nproc)
 #    ENABLE_LTO=0              ThinLTO: 0 = выкл (стабильность), 1 = вкл (после проверки на вылеты)
 #    BUILD_VERSION=2           packageVersion (по умолчанию — таймстамп сборки)
@@ -20,8 +20,8 @@ trap 'echo -e "${red}>>> СБОЙ: строка ${LINENO} — ${BASH_COMMAND}${n
 
 # -------------------------------- конфиг ------------------------------------
 MESA_REPO="https://gitlab.freedesktop.org/mesa/mesa.git"
-MESA_REF="${MESA_REF:-main}"
-SDK_VER="${SDK_VER:-35}"
+MESA_REF="${MESA_REF:-mesa-26.0.0}"
+SDK_VER="${SDK_VER:-34}"
 BUILD_VERSION="${BUILD_VERSION:-$(date +%Y%m%d%H%M)}"
 JOBS="${JOBS:-$(nproc)}"
 ENABLE_LTO="${ENABLE_LTO:-0}"
@@ -178,7 +178,9 @@ patch_mesa_for_ndk(){
 gen_cross_files(){
     local clang="$ndk/aarch64-linux-android${sdkver}-clang"
     local clangxx="$ndk/aarch64-linux-android${sdkver}-clang++"
-    local c_args=( -D__ANDROID__ $CPU_FLAGS -O2 -fno-plt
+    # СТАБИЛЬНЫЙ набор: -fvectorize/-fslp-vectorize и так включены на -O3,
+    # -falign-functions=32 — косметика. Выкинуты как лишние точки отказа.
+    local c_args=( -D__ANDROID__ $CPU_FLAGS -O3 -fno-plt
                    -fomit-frame-pointer $WARN_FLAGS )
     if [ "$ENABLE_LTO" = "1" ]; then c_args+=(-flto=thin); fi
     local c_str
@@ -198,8 +200,9 @@ pkg-config = '/bin/false'
 [properties]
 c_args = [$c_str]
 cpp_args = [$c_str]
-c_link_args = ['-Wl,-z,max-page-size=4096']
-cpp_link_args = ['-Wl,-z,max-page-size=4096']
+# 16KB-страничные прошивки (Android 15/16); на 4KB безвредно
+c_link_args = ['-Wl,-z,max-page-size=16384']
+cpp_link_args = ['-Wl,-z,max-page-size=16384']
 
 [host_machine]
 system = 'android'
@@ -277,6 +280,7 @@ configure_and_build(){
     export LDFLAGS_FOR_BUILD="-fuse-ld=bfd"
 
 
+    # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
     export LLVM_CONFIG="/usr/bin/llvm-config-19"
     export LIBRARY_PATH="/usr/lib/llvm-19/lib:${LIBRARY_PATH:-}"
     export CPATH="/usr/lib/llvm-19/include:${CPATH:-}"
@@ -333,6 +337,15 @@ verify_and_pack(){
     file "$so" || true
     "$ndk/llvm-readelf" -h "$so" | grep -E "Machine:|Type:" || true
 
+    # FIX(loader): 16KB-выравнивание
+    local aligns
+    aligns="$("$ndk/llvm-readelf" -lW "$so" 2>/dev/null | awk '$1=="LOAD"{print $NF}' | sort -u)"
+    if [ "$aligns" != "0x4000" ]; then
+        echo -e "${red}>>> LOAD-сегменты выровнены на ${aligns}, а нужно 0x4000 (16KB)${nocolor}"
+        exit 1
+    fi
+    echo -e "${green}>>> ELF выровнен под 16KB страниц (совместим и с 4KB)${nocolor}"
+
     # FIX(loader): динамическая libc++ в NEEDED уронит dlopen в лоадере
     local needed
     needed="$("$ndk/llvm-readelf" -d "$so" 2>/dev/null | grep NEEDED || true)"
@@ -358,6 +371,7 @@ verify_and_pack(){
     local vkh
     vkh="$(grep -oE 'define VK_HEADER_VERSION [0-9]+' include/vulkan/vulkan_core.h 2>/dev/null | grep -oE '[0-9]+' | head -n1 || true)"
     local outzip="turnip_perf-${MESA_REF}-${githash}.zip"
+
     (
         cd "$prefix/lib"
         cat <<EOF > meta.json
