@@ -57,7 +57,7 @@ jobs:
           fi
 
           # Repack ZIP with updated meta.json
-          SRC=$(ls turnip_workdir/mesa-turnip-perf-*.zip | head -1)
+          SRC=$(ls turnip_workdir/turnip-perf-*.zip | head -1)
           mkdir -p /tmp/turnip-repack && cd /tmp/turnip-repack
           unzip -q "$GITHUB_WORKSPACE/$SRC"
           cat > meta.json << METAEOF
