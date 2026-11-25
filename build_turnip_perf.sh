@@ -270,7 +270,7 @@ collect_meson_opts(){
         case "$o" in --prefix=*) out+=("$o"); continue ;; esac
         name="${o#-D}"; name="${name%%=*}"
           case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc|gallium-drivers|vulkan-drivers|platforms) out+=("$o"); continue ;; esac
-        if [ -f "$optfile" ] && grep -Eq "option\(['\"]${name}['\"]" "$optfile"; then
+        if [ -f "$optfile" ] && grep -Eq "['\"]${name}['\"]" "$optfile"; then
             out+=("$o")
         else
             echo "  ↳ опция ${o} отсутствует в Mesa ${MESA_REF} — пропущена" >&2
