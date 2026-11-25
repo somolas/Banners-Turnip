@@ -263,12 +263,13 @@ collect_meson_opts(){
         "-Dperfetto=false"
         "-Dvalgrind=disabled"
         "-Dlibunwind=disabled"
+        "-Dlibarchive:crypto=disabled"
     )
 
     local out=() o name
     for o in "${want[@]}"; do
         case "$o" in --prefix=*) out+=("$o"); continue ;; esac
-        name="${o#-D}"; name="${name%%=*}"
+          case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc|gallium-drivers|vulkan-drivers|platforms|libarchive:*) out+=("$o"); continue ;; esac
           case "$name" in buildtype|strip|wrap-mode|b_*|llvm|mesa-clc|gallium-drivers|vulkan-drivers|platforms) out+=("$o"); continue ;; esac
         if [ -f "$optfile" ] && grep -Eq "['\"]${name}['\"]" "$optfile"; then
             out+=("$o")
