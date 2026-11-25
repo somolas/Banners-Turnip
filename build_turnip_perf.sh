@@ -228,6 +228,11 @@ system = 'linux'
 cpu_family = 'x86_64'
 cpu = 'x86_64'
 endian = 'little'
+[properties]
+c_args = ['-I/usr/lib/llvm-19/include']
+cpp_args = ['-I/usr/lib/llvm-19/include']
+c_link_args = ['-L/usr/lib/llvm-19/lib']
+cpp_link_args = ['-L/usr/lib/llvm-19/lib']
 
 EOF
 }
