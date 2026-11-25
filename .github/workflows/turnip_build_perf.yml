@@ -22,6 +22,8 @@ jobs:
           pc_file=$(find /usr -name "libclc*.pc" 2>/dev/null | head -n1)
           [ -n "$pc_file" ] && sudo ln -sf "$pc_file" /usr/share/pkgconfig/libclc.pc
           sudo ln -sf /usr/bin/llvm-config-19 /usr/bin/llvm-config
+          sudo ln -sf /usr/lib/llvm-19/lib/libclang* /usr/local/lib/ && sudo ldconfig
+
 
 
 
