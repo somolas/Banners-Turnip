@@ -282,6 +282,7 @@ collect_meson_opts(){
 configure_and_build(){
     cd "$workdir/$srcfolder"
     githash="$(git rev-parse --short HEAD)"
+    unset CC CXX LD AR STRIP CFLAGS CXXFLAGS LDFLAGS
 
     # комьюнити-паттерн 16KB-фикса: дублирует c_link_args, повтор флага безвреден
     export LLVM_CONFIG="/usr/bin/llvm-config-19"
