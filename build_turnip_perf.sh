@@ -255,7 +255,8 @@ collect_meson_opts(){
         "-Dvulkan-beta=true"
         "-Dfreedreno-kmds=kgsl"
         "-Degl=disabled"
-        "-Dllvm=enabled"
+        "-Dllvm=disabled"
+        "-Dmesa-clc=system"
         "-Dshared-llvm=disabled"
         "-Dprecomp-compiler=disabled"
         "-Dandroid-libbacktrace=disabled"
@@ -293,6 +294,24 @@ configure_and_build(){
 
     local opts=()
     mapfile -t opts < <(collect_meson_opts)
+       if ! command -v mesa_clc >/dev/null 2>&1; then
+        env -u CC -u CXX -u LD -u AR -u STRIP -u CFLAGS -u CXXFLAGS -u LDFLAGS \
+            meson setup /tmp/clc-host \
+            --native-file "$workdir/native.txt" \
+            -Dbuildtype=release \
+            -Dplatforms= \
+            -Dgallium-drivers= \
+            -Dvulkan-drivers= \
+            -Dglx=disabled \
+            -Degl=disabled \
+            -Dgbm=disabled \
+            -Dllvm=enabled \
+            -Dmesa-clc=enabled \
+            -Dinstall-mesa-clc=true \
+            --prefix=/tmp/clc-install
+        ninja -C /tmp/clc-host install
+        export PATH="/tmp/clc-install/bin:$PATH"
+    fi
 
     if [ -f "$builddir/build.ninja" ]; then
         meson setup "$builddir" --reconfigure \
