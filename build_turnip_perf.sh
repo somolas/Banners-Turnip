@@ -213,27 +213,26 @@ EOF
 
     cat <<EOF > "$workdir/native.txt"
 [binaries]
-c = 'clang'
-cpp = 'clang++'
-ar = 'ar'
-strip = 'strip'
-c_ld = 'ld'
-cpp_ld = 'ld'
+[binaries]
+c = '/usr/bin/gcc'
+cpp = '/usr/bin/g++'
+ar = '/usr/bin/ar'
+strip = '/usr/bin/strip'
+c_ld = '/usr/bin/ld'
+cpp_ld = '/usr/bin/ld'
 llvm-config = '/usr/bin/llvm-config-19'
-
-
 
 [build_machine]
 system = 'linux'
 cpu_family = 'x86_64'
 cpu = 'x86_64'
 endian = 'little'
-[properties]
-c_args = ['-target', 'x86_64-linux-gnu', '-I/usr/lib/llvm-19/include']
-cpp_args = ['-target', 'x86_64-linux-gnu', '-I/usr/lib/llvm-19/include']
-c_link_args = ['-target', 'x86_64-linux-gnu', '-fuse-ld=ld', '-L/usr/lib/llvm-19/lib']
-cpp_link_args = ['-target', 'x86_64-linux-gnu', '-fuse-ld=ld', '-L/usr/lib/llvm-19/lib']
 
+[properties]
+c_args = ['-I/usr/lib/llvm-19/include']
+cpp_args = ['-I/usr/lib/llvm-19/include']
+c_link_args = ['-L/usr/lib/llvm-19/lib']
+cpp_link_args = ['-L/usr/lib/llvm-19/lib']
 
 EOF
 }
