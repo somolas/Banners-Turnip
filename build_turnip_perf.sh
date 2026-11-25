@@ -265,6 +265,7 @@ collect_meson_opts(){
         "-Dlibunwind=disabled"
         "-Dlibarchive:crypto=disabled"
         "-Dzstd=disabled"
+        "-Dspirv-tools=disabled"
     )
   printf '%s\n' "${want[@]}"
 
