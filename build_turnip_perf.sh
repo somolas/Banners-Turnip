@@ -252,7 +252,6 @@ collect_meson_opts(){
         "-Degl=disabled"
         "-Dllvm=enabled"
         "-Dshared-llvm=disabled"
-        "-Dzstd=disabled"
         "-Dprecomp-compiler=disabled"
         "-Dandroid-libbacktrace=disabled"
         "-Dperfetto=false"
