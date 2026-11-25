@@ -17,7 +17,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build patchelf unzip flex bison git perl python3-pip glslang-tools curl zip patch libclc-19-dev libclang-19-dev llvm-19-dev libllvmspirvlib-19-dev spirv-tools python3-yaml libdrm-dev llvm-19 glslang-dev spirv-headers
+          sudo apt-get install -y ninja-build patchelf unzip flex bison git perl python3-pip glslang-tools curl zip patch libclc-19-dev libclang-19-dev llvm-19-dev libllvmspirvlib-19-dev spirv-tools python3-yaml libdrm-dev llvm-19 glslang-dev spirv-headers libclang-cpp19-dev
           pip3 install --break-system-packages meson mako
           pc_file=$(find /usr -name "libclc*.pc" 2>/dev/null | head -n1)
           [ -n "$pc_file" ] && sudo ln -sf "$pc_file" /usr/share/pkgconfig/libclc.pc
