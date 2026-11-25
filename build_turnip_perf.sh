@@ -358,7 +358,6 @@ verify_and_pack(){
     local vkh
     vkh="$(grep -oE 'define VK_HEADER_VERSION [0-9]+' include/vulkan/vulkan_core.h 2>/dev/null | grep -oE '[0-9]+' | head -n1 || true)"
     local outzip="turnip_perf-${MESA_REF}-${githash}.zip"
-
     (
         cd "$prefix/lib"
         cp libvulkan_freedreno.so vulkan.ad07xx.so
