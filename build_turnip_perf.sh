@@ -219,7 +219,9 @@ ar = 'ar'
 strip = 'strip'
 c_ld = 'ld'
 cpp_ld = 'ld'
-llvm-config = '/usr/lib/llvm-19/bin/llvm-config'
+llvm-config = '$(find /usr -name "llvm-config*" -type f -executable 2>/dev/null | sort -V | tail -n1)'
+
+
 
 [build_machine]
 system = 'linux'
