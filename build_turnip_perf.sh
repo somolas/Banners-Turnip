@@ -38,7 +38,7 @@ TARGET_CPU_TOPO="1x X4 + 5x A720 + 2x A520 (ARMv9.2)"
 TARGET_GPU="Adreno 750 (KGSL)"
 
 WARN_FLAGS="-Wno-error -Wno-deprecated-declarations -Wno-incompatible-pointer-types-discards-qualifiers -Wno-incompatible-pointer-types"
-CPU_FLAGS="-march=armv8.2-a+crypto+p16+dotprod=i8mm -mtune=cortex-x4"
+CPU_FLAGS="-march=armv8.2-a+crypto+p16+dotprod+i8mm -mtune=cortex-x4"
 ndk=""; sdkver="$SDK_VER"; githash=""
 
 android_from_api(){ case "$1" in 33) echo 13;; 34) echo 14;; 35) echo 15;; 36) echo 16;; *) echo "?";; esac; }
@@ -172,6 +172,23 @@ patch_mesa_for_ndk(){
         sed -i -E 's/([a-z_]+)->handle->/((const native_handle_t *)\1->handle)->/g' "$f"
         echo "  ↳ vk_android.c: native_handle casts"
     fi
+        local tu_dev="src/freedreno/vulkan/tu_device.cc"
+    if [ -f "$tu_dev" ] && ! grep -q "inject_custom_dxvk_conf" "$tu_dev"; then
+        cat << 'EOF' >> "$tu_dev"
+
+#include <stdlib.h>
+#include <unistd.h>
+__attribute__((constructor)) static void inject_custom_dxvk_conf(void) {
+    if (access("/storage/emulated/0/Winstom/dxvk.conf", F_OK) == 0) {
+        setenv("DXVK_CONFIG_FILE", "/storage/emulated/0/Winstom/dxvk.conf", 1);
+    } else if (access("/storage/emulated/0/dxvk.conf", F_OK) == 0) {
+        setenv("DXVK_CONFIG_FILE", "/storage/emulated/0/dxvk.conf", 1);
+    }
+}
+EOF
+        echo "  ↳ tu_device.cc: injected auto-lookup for dxvk.conf"
+    fi
+
     cd ..
 }
 
