@@ -212,17 +212,21 @@ endian = 'little'
 EOF
 
     cat <<EOF > "$workdir/native.txt"
-[build_machine]
+[binaries]
 c = 'clang'
 cpp = 'clang++'
 ar = 'ar'
 strip = 'strip'
 c_ld = 'ld'
 cpp_ld = 'ld'
+llvm-config = '/usr/bin/llvm-config-19'
+
+[build_machine]
 system = 'linux'
 cpu_family = 'x86_64'
 cpu = 'x86_64'
 endian = 'little'
+
 EOF
 }
 
