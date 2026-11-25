@@ -258,7 +258,7 @@ collect_meson_opts(){
         "-Dllvm=disabled"
         "-Dmesa-clc=system"
         "-Dshared-llvm=disabled"
-        "-Dprecomp-compiler=disabled"
+        "-Dprecomp-compiler=system"
         "-Dandroid-libbacktrace=disabled"
         "-Dperfetto=false"
         "-Dvalgrind=disabled"
