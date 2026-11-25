@@ -219,7 +219,7 @@ ar = 'ar'
 strip = 'strip'
 c_ld = 'ld'
 cpp_ld = 'ld'
-llvm-config = '$(find /usr -name "llvm-config*" -type f -executable 2>/dev/null | sort -V | tail -n1)'
+llvm-config = '/usr/bin/llvm-config-19'
 
 
 
