@@ -24,7 +24,7 @@ MESA_REF="${MESA_REF:-mesa-26.0.0}"
 SDK_VER="${SDK_VER:-34}"
 BUILD_VERSION="${BUILD_VERSION:-$(date +%Y%m%d%H%M)}"
 JOBS="${JOBS:-$(nproc)}"
-ENABLE_LTO="${ENABLE_LTO:-0}"
+ENABLE_LTO="${ENABLE_LTO:-1}"
 SKIP_SOURCE_DOWNLOAD="${SKIP_SOURCE_DOWNLOAD:-0}"
 
 workdir="$(pwd)/turnip_workdir"
@@ -38,7 +38,7 @@ TARGET_CPU_TOPO="1x X4 + 5x A720 + 2x A520 (ARMv9.2)"
 TARGET_GPU="Adreno 750 (KGSL)"
 
 WARN_FLAGS="-Wno-error -Wno-deprecated-declarations -Wno-incompatible-pointer-types-discards-qualifiers -Wno-incompatible-pointer-types"
-CPU_FLAGS="-march=armv8.2-a+crypto+p16+dotprod=i8mm"
+CPU_FLAGS="-march=armv8.2-a+crypto+p16+dotprod=i8mm -mtune=cortex-x4"
 ndk=""; sdkver="$SDK_VER"; githash=""
 
 android_from_api(){ case "$1" in 33) echo 13;; 34) echo 14;; 35) echo 15;; 36) echo 16;; *) echo "?";; esac; }
