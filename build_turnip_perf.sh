@@ -188,11 +188,21 @@ __attribute__((constructor)) static void inject_custom_dxvk_conf(void) {
 EOF
         echo "  ↳ tu_device.cc: injected auto-lookup for dxvk.conf"
     fi
-        local balancer_py="$(dirname "$workdir")/patches/common/2.y700_gen3_balancer.py"
+           local balancer_py="$(dirname "$workdir")/patches/common/2.y700_gen3_balancer.py"
     echo -e "${yellow}Applying Turnip Unleashed V7 Balancer ($balancer_py)...${nocolor}"
-        python3 "$balancer_py" . --no-backup --diff || { rc=$?; [ $rc -eq 2 ] || exit $rc; }
-              python3 -c 'import re; p="src/util/u_queue.c"; s=open(p).read(); d="extern void tu_balancer_worker_hook(const char *name) __attribute__((weak));\n"; open(p,"w").write(d+re.sub(r"[ \t]*extern\s+void\s+tu_balancer_worker_hook[^;]+;\s*","",s))'
+    python3 "$balancer_py" . --no-backup --diff || { rc=$?; [ $rc -eq 2 ] || exit $rc; }
+    python3 -c '
+import re
+p = "src/util/u_queue.c"
+s = open(p).read()
+d = "extern void tu_balancer_worker_hook(const char *name) __attribute__((weak, visibility(\"default\")));\n"
+s = re.sub(r"[^\n]*tu_balancer_worker_hook\s*\(const char \*name\)[^;]*;\s*", "", s)
+open(p, "w").write(d + s)
 
+h = "src/freedreno/vulkan/tu_balancer.h"
+hs = open(h).read()
+hs = hs.replace("void tu_balancer_worker_hook(const char *name)", "__attribute__((visibility(\"default\"), used)) void tu_balancer_worker_hook(const char *name)")
+open(h, "w").write(hs)
 
     cd ..
 }
