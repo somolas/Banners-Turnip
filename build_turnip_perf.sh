@@ -190,7 +190,6 @@ EOF
     fi
         local balancer_py="$(dirname "$workdir")/patches/common/2.y700_gen3_balancer.py"
     echo -e "${yellow}Applying Turnip Unleashed V7 Balancer ($balancer_py)...${nocolor}"
-    python3 "$balancer_py" --self-test
     python3 "$balancer_py" . --no-backup --diff
 
     cd ..
