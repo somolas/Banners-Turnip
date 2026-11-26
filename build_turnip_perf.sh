@@ -189,7 +189,7 @@ EOF
         echo "  ↳ tu_device.cc: injected auto-lookup for dxvk.conf"
     fi
     local balancer_py
-    balancer_py="$(find "$(dirname "$workdir")" -maxdepth 4 -name "y700_gen3_balancer.py" -print -quit 2>/dev/null || true)"
+    balancer_py="$(find "$(dirname "$workdir")" -maxdepth 4 -name "2.y700_gen3_balancer.py" -print -quit 2>/dev/null || true)"
     if [ -n "$balancer_py" ]; then
         echo -e "${yellow}Applying Turnip Unleashed V7 Balancer...${nocolor}"
         python3 "$balancer_py" --self-test
