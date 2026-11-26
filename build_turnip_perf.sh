@@ -196,7 +196,7 @@ import re
 p = "src/util/u_queue.c"
 s = open(p).read()
 d = 'extern void tu_balancer_worker_hook(const char *name) __attribute__((weak, visibility("default")));\n'
-s = re.sub(r".*tu_balancer_worker_hook\s*\(const char \*name\)[^;]*;\s*", "", s)
+s = re.sub(r"[^\n]*tu_balancer_worker_hook\s*\([^)]*const\s+char[^)]*\)[^;]*;\s*", "", s)
 open(p, "w").write(d + s)
 
 h = "src/freedreno/vulkan/tu_balancer.h"
