@@ -188,6 +188,16 @@ __attribute__((constructor)) static void inject_custom_dxvk_conf(void) {
 EOF
         echo "  ↳ tu_device.cc: injected auto-lookup for dxvk.conf"
     fi
+    local balancer_py
+    balancer_py="$(find "$(dirname "$workdir")" -maxdepth 4 -name "y700_gen3_balancer.py" -print -quit 2>/dev/null || true)"
+    if [ -n "$balancer_py" ]; then
+        echo -e "${yellow}Applying Turnip Unleashed V7 Balancer...${nocolor}"
+        python3 "$balancer_py" --self-test
+        python3 "$balancer_py" . --no-backup --diff
+    else
+        echo -e "${red}ОШИБКА: y700_gen3_balancer.py не найден!${nocolor}"
+        exit 1
+    fi
 
     cd ..
 }
