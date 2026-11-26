@@ -191,6 +191,7 @@ EOF
         local balancer_py="$(dirname "$workdir")/patches/common/2.y700_gen3_balancer.py"
     echo -e "${yellow}Applying Turnip Unleashed V7 Balancer ($balancer_py)...${nocolor}"
         python3 "$balancer_py" . --no-backup --diff || { rc=$?; [ $rc -eq 2 ] || exit $rc; }
+            python3 -c 'p="src/util/u_queue.c"; s=open(p).read(); d="extern void tu_balancer_worker_hook(const char *name) __attribute__((weak));\n"; open(p,"w").write(d+s.replace(d,""))'
 
     cd ..
 }
