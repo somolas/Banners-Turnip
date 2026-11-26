@@ -292,3 +292,28 @@ if "tu_balancer_worker_hook" not in uq_src:
 uq_src = uq_src.replace(target, inject, 1)
 uq_file.write_text(uq_src)
 print("[y700_gen3_balancer] Patched u_queue.c")
+sh_src = '#include "tu_balancer.h"\n' + sh_src
+idx = sh_src.find("tu_CreateShaderModule(")
+if idx != -1:
+brace = sh_src.find("{", idx)
+sh_src = sh_src[:brace+1] + "\n   tu_isolate_translator_threads();\n" + sh_src[brace+1:]
+shader_file.write_text(sh_src)
+print("[y700_gen3_balancer] Patched tu_shader.cc")
+
+5. Патчим src/util/u_queue.c
+
+uq_file = pathlib.Path("src/util/u_queue.c")
+uq_src = uq_file.read_text()
+if "tu_balancer_worker_hook" not in uq_src:
+decl = '\n#ifdef ANDROID\n__attribute__((weak)) void tu_balancer_worker_hook(void);\n#endif\n'
+idx = uq_src.find("util_queue_thread_func(")
+if idx == -1:
+sys.exit("Error: util_queue_thread_func not found")
+uq_src = uq_src[:idx] + decl + uq_src[idx:]
+target = "job.execute(job.job, job.gdata, thread_index);"
+if target not in uq_src:
+sys.exit("Error: job.execute not found in u_queue.c")
+inject = "#ifdef ANDROID\n      if (tu_balancer_worker_hook) tu_balancer_worker_hook();\n#endif\n      " + target
+uq_src = uq_src.replace(target, inject, 1)
+uq_file.write_text(uq_src)
+print("[y700_gen3_balancer] Patched u_queue.c")
