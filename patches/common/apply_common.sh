@@ -111,6 +111,8 @@ entry = f'''        <application name="UNCHARTED: Legacy of Thieves Collection" 
 i = s.rindex('    </device>')
 open(p, 'w').write(s[:i] + entry + s[i:])
 PY
+python3 "$(dirname "$0")/y700_gen3_balancer.py"
+
 fi
 grep -qF "application_name_match=\"$uncharted_match\"" "$conf" \
 	|| { echo "[common] UNCHARTED tu_enable_ssbo_emulation entry did not reach 00-turnip-defaults.conf" >&2; exit 1; }
